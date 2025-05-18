@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Check any URL for phishing threats with advanced machine learning.">
+  <meta name="keywords" content="phishing url,phishing,cyber security,machine learning,classifier,python">
+  <meta name="author" content="VAIBHAV BICHAVE">
+  <!-- BootStrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link href="static/styles.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>URL Shield - Phishing Detection</title>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="main-card">
+          <div class="card-body">
+            <div class="app-title">
+              <h1>Phishing URL Detection</h1>
+              <p class="app-subtitle">Advanced ML-powered analysis to identify malicious websites</p>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-7">
+                <div class="search-container">
+                  <form action="/" method="post">
+                    <div class="url-input-container">
+                      <input type="text" class="url-input" name="url" id="url" placeholder="Enter any URL to scan..." required="" />
+                      <button class="btn-check" type="submit">
+                        <span>Analyze</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-lock" viewBox="0 0 16 16">
+                          <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .866-.118 11 11 0 0 0 3.18-2.733c1.527-2.1 2.807-5.17 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 10.075a11.8 11.8 0 0 1-3.35 2.872 1.9 1.9 0 0 1-1.643 0 11.8 11.8 0 0 1-3.35-2.872C2.877 10.487 1.494 7.17 2.09 2.692A1.54 1.54 0 0 1 3.132 1.43c.658-.215 1.777-.57 2.887-.87z"/>
+                          <path d="M8 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M5.5 6a.5.5 0 0 0-.5.5v1.5a.5.5 0 0 0 1 0v-1.5a.5.5 0 0 0-.5-.5m5 0a.5.5 0 0 0-.5.5v1.5a.5.5 0 0 0 1 0v-1.5a.5.5 0 0 0-.5-.5m-3 2.5a.5.5 0 0 0-1 0v1a.5.5 0 0 0 1 0zm2 0a.5.5 0 0 0-1 0v1a.5.5 0 0 0 1 0z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="result-container">
+                  <div class="checked-url">
+                    <a href="{{ url }}" target="_blank" id="url-display">{{ url }}</a>
+                  </div>
+                  <div class="prediction-result">
+                    <h3 id="prediction"></h3>
+                    <div class="safety-meter">
+                      <div class="safety-bar" id="safety-bar"></div>
+                    </div>
+                  </div>
+                  <div class="action-buttons">
+                    <button class="btn-safe" id="button1" role="button" onclick="window.open('{{url}}')" target="_blank">
+                      Continue Safely
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                      </svg>
+                    </button>
+                    <button class="btn-unsafe" id="button2" role="button" onclick="window.open('{{url}}')" target="_blank">
+                      Proceed Anyway
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <p>© 2025 Minor Project by Harshita | MD | Shivam |Adiyta  • AI-Powered URL Analysis</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+  <script>
+    let x = '{{xx}}';
+    let num = x*100;
+    if (0<=x && x<0.50){
+      num = 100-num;
+    }
+    let txtx = num.toString();
+    
+    if(x<=1 && x>=0.50){
+      var label = "Website is " + txtx + "% safe to use...";
+      document.getElementById("prediction").innerHTML = label;
+      document.getElementById("button1").style.display = "flex";
+      document.getElementById("safety-bar").style.width = txtx + "%";
+      document.getElementById("safety-bar").style.backgroundColor = "var(--success-color)";
+    }
+    else if (0<=x && x<0.50){
+      var label = "Website is " + txtx + "% unsafe to use..."
+      document.getElementById("prediction").innerHTML = label;
+      document.getElementById("button2").style.display = "flex";
+      document.getElementById("safety-bar").style.width = txtx + "%";
+      document.getElementById("safety-bar").style.backgroundColor = "var(--danger-color)";
+    }
+    
+    // Hide URL display if it's empty
+    if (!document.getElementById("url-display").textContent.trim()) {
+      document.querySelector(".checked-url").style.display = "none";
+    }
+    
+    // Add futuristic typing animation to prediction text
+    document.addEventListener("DOMContentLoaded", function() {
+      const predictionText = document.getElementById("prediction");
+      if (predictionText && predictionText.textContent) {
+        const text = predictionText.textContent;
+        predictionText.textContent = "";
+        
+        let i = 0;
+        const typeWriter = function() {
+          if (i < text.length) {
+            predictionText.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 30);
+          }
+        };
+        
+        setTimeout(typeWriter, 500);
+      }
+    });
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="This website is develop for identify the safety of url.">
+  <meta name="keywords" content="phishing url,phishing,cyber security,machine learning,classifier,python">
+  <meta name="author" content="VAIBHAV BICHAVE">
+  <!-- BootStrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link href="static/styles.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>URL Detection</title>
+</head>
+</html>
